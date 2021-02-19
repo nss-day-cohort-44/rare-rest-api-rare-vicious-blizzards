@@ -44,4 +44,12 @@ class Category(ViewSet):
 
         category = Category.objects.all()
 
-        seriliazer = CategorySerializer(category, many=True, )
+        seriliazer = CategorySerializer(
+            category, many=True, context={'request': request})
+    return Response(serializer.data)
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ('label')
