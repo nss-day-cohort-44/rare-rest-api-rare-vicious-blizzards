@@ -16,7 +16,7 @@ class CommentView(ViewSet):
         """Handle POST operations
 
         Returns:
-            Response -- JSON serialized game instance
+            Response -- JSON serialized comment instance
         """
 
         # Uses the token passed in the `Authorization` header
@@ -28,7 +28,7 @@ class CommentView(ViewSet):
         comment = Comment()
         comment.content = request.data["content"]
         comment.created_on = request.data["createdOn"]
-        comment.post = request.data["numberOfPlayers"]
+        comment.post = request.data["post"]
         comment.author = author
         
         # Use the Django ORM to get the record from the database
@@ -56,90 +56,89 @@ class CommentView(ViewSet):
 
 
     def retrieve(self, request, pk=None):
-        """Handle GET requests for single game
+        """Handle GET requests for single comment
 
         Returns:
-            Response -- JSON serialized game instance
+            Response -- JSON serialized comment instance
         """
         try:
             # `pk` is a parameter to this function, and
             # Django parses it from the URL route parameter
-            #   http://localhost:8000/games/2
+            #   http://localhost:8000/comments/2
             #
             # The `2` at the end of the route becomes `pk`
-            game = Games.objects.get(pk=pk)
-            serializer = GameSerializer(game, context={'request': request})
+            comment = Comment.objects.get(pk=pk)
+            serializer = CommentSerializer(comment, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
 
     def update(self, request, pk=None):
-        """Handle PUT requests for a game
+        """Handle PUT requests for a comment
 
         Returns:
             Response -- Empty body with 204 status code
         """
-        gamer = Gamer.objects.get(user=request.auth.user)
+        author = RareUser.objects.get(user=request.auth.user)
 
         # Do mostly the same thing as POST, but instead of
-        # creating a new instance of Game, get the game record
+        # creating a new instance of Comment, get the comment record
         # from the database whose primary key is `pk`
-        game = Games.objects.get(pk=pk)
-        game.title = request.data["title"]
-        game.maker = request.data["maker"]
-        game.number_of_players = request.data["numberOfPlayers"]
-        game.skill_level = request.data["skillLevel"]
-        game.gamer = gamer
+        comment = Comment()
+        comment.content = request.data["content"]
+        comment.created_on = request.data["createdOn"]
+        comment.post = request.data["post"]
+        comment.author = author
 
-        gametype = GameType.objects.get(pk=request.data["gameTypeId"])
-        game.gametype = gametype
-        game.save()
+        post = Post.objects.get(pk=request.data["postId"])
+        comment.post = post
+        comment.save()
 
         # 204 status code means everything worked but the
         # server is not sending back any data in the response
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
     def destroy(self, request, pk=None):
-        """Handle DELETE requests for a single game
+        """Handle DELETE requests for a single comment
 
         Returns:
             Response -- 200, 404, or 500 status code
         """
         try:
-            game = Games.objects.get(pk=pk)
-            game.delete()
+            comment = Comment.objects.get(pk=pk)
+            comment.delete()
 
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 
-        except Games.DoesNotExist as ex:
+        except Comment.DoesNotExist as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
 
         except Exception as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def list(self, request):
-        """Handle GET requests to games resource
+        """Handle GET requests to comments resource
 
         Returns:
-            Response -- JSON serialized list of games
+            Response -- JSON serialized list of comments
         """
-        # Get all game records from the database
-        games = Games.objects.all()
+        # Get all comment records from the database
+        comment = Comment.objects.all()
 
-        # Support filtering games by type
-        #    http://localhost:8000/games?type=1
+        # Support filtering comments by type
+        #    http://localhost:8000/comments?type=1
         #
-        # That URL will retrieve all tabletop games
-        game_type = self.request.query_params.get('type', None)
-        if game_type is not None:
-            games = games.filter(gametype__id=game_type)
+        # That URL will retrieve all comments?
+        post = self.request.query_params.get('post', None)  # <<not sure about 'post' here
+        if post is not None:
+            comment = comment.filter(post__id=post)
 
-        serializer = GameSerializer(
-            games, many=True, context={'request': request})
+        serializer = CommentSerializer(
+            comment, many=True, context={'request': request})
         return Response(serializer.data)
 
 class CommentSerializer(serializers.ModelSerializer):
-    """JSON serializer for games
+    """JSON serializer for comments
 
     Arguments:
         serializer type
