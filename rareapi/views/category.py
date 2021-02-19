@@ -48,8 +48,25 @@ class Category(ViewSet):
             category, many=True, context={'request': request})
     return Response(serializer.data)
 
+    # This will handle the edit of a category
+
+    def destroy(self, request, pk=None):
+
+        try:
+        category = Category.objects.get(pk=pk)
+        category.delete()
+
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+    def update(self, request, pk=None)
+    category = Category.objects.get(pk=pk)
+    category.label = request.data['label']
+
+    category.save()
+    return Response({}, status=status.HTTP_204_NO_CONTENT)
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('label')
+        fields = ('id', 'label',)
