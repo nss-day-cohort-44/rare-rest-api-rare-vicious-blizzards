@@ -76,7 +76,7 @@ class Tags(ViewSet):
         Returns:
             Response -- Empty body with 204 status code
         """
-        # Do mostly the same thing as POST, but instead of
+       # Do mostly the same thing as POST, but instead of
         # creating a new instance of tag, get the tag record
         # from the database whose primary key is `pk`
        tag =Tag.objects.get(pk=pk)
