@@ -1,0 +1,24 @@
+[
+    {
+        "model": "rareapi.rareuser",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "profile_image": "None",
+            "created_on": "2020-08-28",
+            "active": true,
+            "bio": "Writer of Harry Potter fan fiction. Team Ravenclaw!"
+        }
+    },
+    {
+        "model": "rareapi.rareuser",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "profile_image": "None",
+            "created_on": "2020-09-28",
+            "active": true,
+            "bio": "Songwriter. Currently working on anger issues."
+        }
+    }
+]

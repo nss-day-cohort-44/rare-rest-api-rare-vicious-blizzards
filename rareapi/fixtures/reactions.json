@@ -1,0 +1,42 @@
+[
+    {
+        "model": "rareapi.reaction",
+        "pk": 1,
+        "fields": {
+            "label": "Pizza",
+            "image_url": "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/271/pizza_1f355.png"
+        }
+    },
+    {
+        "model": "rareapi.reaction",
+        "pk": 2,
+        "fields": {
+            "label": "pensive",
+            "image_url": "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/271/pensive-face_1f614.png"
+        }
+    },
+    {
+        "model": "rareapi.reaction",
+        "pk": 3,
+        "fields": {
+            "label": "bank",
+            "image_url": "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/google/274/bank_1f3e6.png"
+        }
+    },
+    {
+        "model": "rareapi.reaction",
+        "pk": 4,
+        "fields": {
+            "label": "Rabbit Face",
+            "image_url": "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/google/274/rabbit-face_1f430.png"
+        }
+    },
+    {
+        "model": "rareapi.reaction",
+        "pk": 5,
+        "fields": {
+            "label": "Snowflake",
+            "image_url": "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/271/snowflake_2744-fe0f.png"
+        }
+    }
+]

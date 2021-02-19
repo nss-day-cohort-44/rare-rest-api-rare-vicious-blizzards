@@ -1,0 +1,54 @@
+[
+    {
+        "model": "rareapi.post",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "title": "Kittens Will Soon Replace Most Workers, Research Says",
+            "post_image": "None",
+            "content": "You will soon be obsolete. Kittens, not robots, are the future of the workplace.",
+            "approved": true,
+            "category": 5,
+            "publication_date": "2019-03-28"
+        }
+    },
+    {
+        "model": "rareapi.post",
+        "pk": 2,
+        "fields": {
+            "user": 1,
+            "title": "My Husband is Useless and Does Nothing",
+            "post_image": "None",
+            "content": "Good thing he's good in bed.",
+            "approved": true,
+            "category": 3,
+            "publication_date": "2020-05-28"
+        }
+    },
+    {
+        "model": "rareapi.post",
+        "pk": 3,
+        "fields": {
+            "user": 2,
+            "title": "Three Life Lessons from a Dying Man",
+            "post_image": "None",
+            "content": "Don't listen to your parents.",
+            "approved": true,
+            "category": 2,
+            "publication_date": "2020-12-28"
+        }
+    },
+    {
+        "model": "rareapi.post",
+        "pk": 4,
+        "fields": {
+            "user": 2,
+            "title": "What Your Signature Drink Says About You",
+            "post_image": "None",
+            "content": "You're a lush, but you're cute.",
+            "approved": true,
+            "category": 4,
+            "publication_date": "2021-01-28"
+        }
+    }
+]
