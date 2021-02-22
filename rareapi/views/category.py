@@ -7,11 +7,13 @@ from rest_framework.decorators import action
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
+from rareapi.models import Category
+
 
 # This will handle all the POST for category
 
 
-class Category(ViewSet):
+class CategoriesView(ViewSet):
 
     def create(self, request):
         category = Category()
@@ -35,38 +37,38 @@ class Category(ViewSet):
             serializer = CategorySerializer(
                 category, context={'request': request})
             return Response(serializer.data)
-        except Exception:
+        except Exception as ex:
             return HttpResponseServerError(ex)
 
     # This will handle listing out all categories
 
     def list(self, request):
 
-        category = Category.objects.all()
+        categories = Category.objects.all()
 
-        seriliazer = CategorySerializer(
-            category, many=True, context={'request': request})
-    return Response(serializer.data)
+        serializer = CategorySerializer(
+            categories, many=True, context={'request': request})
+        return Response(serializer.data)
 
     # This will handle the edit of a category
 
     def destroy(self, request, pk=None):
 
         try:
-        category = Category.objects.get(pk=pk)
-        category.delete()
+            category = Category.objects.get(pk=pk)
+            category.delete()
 
-        return Response({}, status=status.HTTP_204_NO_CONTENT)
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
 
-    def update(self, request, pk=None)
-    category = Category.objects.get(pk=pk)
-    category.label = request.data['label']
+        except Category.DoesNotExist as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
 
-    category.save()
-    return Response({}, status=status.HTTP_204_NO_CONTENT)
+        except Exception as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class CategorySerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Category
-        fields = ('id', 'label',)
+        fields = ('id', 'label')

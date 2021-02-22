@@ -6,5 +6,6 @@
             "name": "rareSecond",
             "database": "db.sqlite3"
         }
-    ]
+    ],
+    "python.pythonPath": "/Users/charlie/.local/share/virtualenvs/rare-group2-iuiGHmPM/bin/python"
 }
