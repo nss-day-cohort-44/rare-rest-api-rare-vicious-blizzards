@@ -7,6 +7,7 @@
             "database": "db.sqlite3"
         }
     ],
+<<<<<<< HEAD
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#fbed80",
         "activityBar.activeBorder": "#06b9a5",
@@ -24,4 +25,8 @@
         "titleBar.inactiveForeground": "#15202b99"
     },
     "peacock.remoteColor": "#f9e64f"
+=======
+    "python.linting.pylintEnabled": true,
+    "python.pythonPath": "/home/alanandrusky/.local/share/virtualenvs/rare-f1vh_PYW/bin/python"
+>>>>>>> main
 }
