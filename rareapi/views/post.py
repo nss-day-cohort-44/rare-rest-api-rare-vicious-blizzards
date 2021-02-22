@@ -6,7 +6,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from rareapi.models import Post, RareUser
+from rareapi.models import Post, RareUser, Tag, PostTag, post_tag
 
 class PostsView(ViewSet):
     """Rare Posts"""
@@ -45,11 +45,26 @@ class PostsView(ViewSet):
         """
 
         posts = Post.objects.all()
-
+        # post_tags = PostTag.objects.filter(post_)
         serializer = PostSerializer(
             posts, many=True, context={'request': request})
 
         return Response(serializer.data)
+
+class TagSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Tag
+        fields = ("label",)
+
+class PostTagSerializer(serializers.ModelSerializer):
+    
+    tag = TagSerializer(many=False)
+
+    class Meta:
+        model = PostTag
+        fields = ("id", "tag")
+        depth=1
         
 class PostSerializer(serializers.ModelSerializer):
     """JSON serializer for Posts
@@ -58,6 +73,17 @@ class PostSerializer(serializers.ModelSerializer):
         serializer type
     """
 
+    tags = PostTagSerializer(many=True)
+
     class Meta:
         model = Post
         fields = ("id", "title", "publication_date", "post_image", "content", "approved", "category", "user", "comments", "tags")
+        depth=2
+
+
+
+
+
+
+
+
