@@ -1,10 +1,11 @@
 {
-    "sqltools.connections": [
-        {
-            "previewLimit": 50,
-            "driver": "SQLite",
-            "name": "rareSecond",
-            "database": "db.sqlite3"
-        }
-    ]
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "rareSecond",
+      "database": "db.sqlite3"
+    }
+  ],
+  "python.pythonPath": "/Users/silaslowe/.local/share/virtualenvs/rare-rest-api-rare-vicious-blizzards-Px7WD9-H/bin/python"
 }
