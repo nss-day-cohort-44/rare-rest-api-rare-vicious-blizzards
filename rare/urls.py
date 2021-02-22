@@ -17,14 +17,14 @@ from django.contrib import admin
 from django.conf.urls import include
 from rest_framework import routers
 from django.urls import path
-from rareapi.views import Tags,CategoriesView,CommentView
+from rareapi.views import Tags,CategoriesView,CommentView,PostsView
 
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'tags', Tags, 'tag')
 router.register(r'categories', CategoriesView, 'category')
 router.register(r'comments', CommentView, 'comment')
-
+router.register(r'posts', PostsView, 'post')
 
 urlpatterns = [
     path('', include(router.urls)),
