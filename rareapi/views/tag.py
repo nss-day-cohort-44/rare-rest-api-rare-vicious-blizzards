@@ -6,7 +6,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from levelupapi.models import Tag,PostTag
+from rareapi.models import Tag
 
 class Tags(ViewSet):
     """Level up tags"""
@@ -79,10 +79,10 @@ class Tags(ViewSet):
        # Do mostly the same thing as POST, but instead of
         # creating a new instance of tag, get the tag record
         # from the database whose primary key is `pk`
-       tag =Tag.objects.get(pk=pk)
-       tag.label = request.data["label"]
+        tag = Tag.objects.get(pk=pk)
+        tag.label = request.data["label"]
 
-       tag.save()
+        tag.save()
 
         # 204 status code means everything worked but the
         # server is not sending back any data in the response
@@ -116,4 +116,4 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ('id', 'label')
-        depth = 1
+     
