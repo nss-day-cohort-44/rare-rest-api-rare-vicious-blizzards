@@ -25,6 +25,7 @@ class CategoriesView(ViewSet):
             serializer = CategorySerializer(
                 category, context={'request': request})
             return Response(serializer.data)
+
         except ValidationError as ex:
             return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
 
