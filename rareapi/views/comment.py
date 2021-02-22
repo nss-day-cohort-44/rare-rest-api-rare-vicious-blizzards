@@ -1,13 +1,10 @@
-"""View module for handling requests about comments"""
 from django.core.exceptions import ValidationError
 from rest_framework import status
 from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
-from rest_framework import status
 from rareapi.models import Post, RareUser, Comment
-
 
 class CommentView(ViewSet):
     """RARE Comments"""
@@ -20,6 +17,7 @@ class CommentView(ViewSet):
         """
 
         # Uses the token passed in the `Authorization` header
+        
         author = RareUser.objects.get(user=request.auth.user)
 
         # Create a new Python instance of the Comment class
@@ -28,15 +26,12 @@ class CommentView(ViewSet):
         comment = Comment()
         comment.content = request.data["content"]
         comment.created_on = request.data["createdOn"]
-        comment.post = request.data["post"]
+        comment.post_id = request.data["post"]
         comment.author = author
         
         # Use the Django ORM to get the record from the database
         # whose `id` is what the client passed as the
         # `postId` and `rareUserId` in the body of the request.
-        post = Post.objects.get(pk=request.data["postId"])
-        comment.post = post
-
        
 
         # Try to post the new comment to the database, then
@@ -146,4 +141,4 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ('id', 'post', 'author','content', 'created_on')
-        depth = 1
+        # depth = 1
