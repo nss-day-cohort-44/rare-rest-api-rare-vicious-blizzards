@@ -8,4 +8,5 @@
         }
     ],
     "python.pythonPath": "/Users/charlie/.local/share/virtualenvs/rare-group2-iuiGHmPM/bin/python"
+    "python.linting.pylintEnabled": true,
 }
