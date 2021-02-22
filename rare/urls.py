@@ -20,6 +20,7 @@ from django.urls import path
 from rareapi.views import Tags
 from rareapi.views import CategoriesView
 from rareapi.views import CommentView
+from rareapi.views import register_user, login_user
 
 
 router = routers.DefaultRouter(trailing_slash=False)
@@ -30,7 +31,9 @@ router.register(r'comments', CommentView, 'comment')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('register', register_user),
+    path('login', login_user),
     path('admin/', admin.site.urls),
     path('api-auth', include('rest_framework.urls', namespace='rest_framework')),
-    # from rareapi.views import register_user, login_user
+
 ]
