@@ -31,10 +31,7 @@ router.register(r'comments', CommentView, 'comment')
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
-from django.conf.urls import include
-from django.urls import path
-from rest_framework import routers
-  path('api-auth', include('rest_framework.urls', namespace='rest_framework')),
+    path('api-auth', include('rest_framework.urls', namespace='rest_framework')),
 # from rareapi.views import register_user, login_user
 ]
 
