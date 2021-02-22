@@ -8,6 +8,7 @@
         }
     ],
 <<<<<<< HEAD
+<<<<<<< HEAD
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#fbed80",
         "activityBar.activeBorder": "#06b9a5",
@@ -28,5 +29,9 @@
 =======
     "python.linting.pylintEnabled": true,
     "python.pythonPath": "/home/alanandrusky/.local/share/virtualenvs/rare-f1vh_PYW/bin/python"
+>>>>>>> main
+=======
+    "python.pythonPath": "/Users/charlie/.local/share/virtualenvs/rare-group2-iuiGHmPM/bin/python"
+    "python.linting.pylintEnabled": true,
 >>>>>>> main
 }
