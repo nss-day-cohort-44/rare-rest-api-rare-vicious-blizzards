@@ -21,7 +21,7 @@ def login_user(request):
     if request.method == 'POST':
 
         #Use the build-in auth method to verify
-        username = req_body['username']
+        username = req_body['email']
         password = req_body['password']
         authenticated_user = authenticate(username=username, password=password)
 
@@ -62,7 +62,8 @@ def register_user(request):
 
     rare_user = RareUser.objects.create(
         created_on = datetime.datetime.today(),
-        user = new_user
+        user = new_user,
+        active = True
     )
 
     # Commit the user to the database by saving it
@@ -72,5 +73,5 @@ def register_user(request):
     token = Token.objects.create(user=new_user)
 
     #Return the token to the client
-    data = json.dumps({"token": token.key})
+    data = json.dumps({"token": token.key, "valid": True})
     return HttpResponse(data, content_type='application/json')
