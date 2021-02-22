@@ -153,4 +153,6 @@ dmypy.json
 
 Pipfile
 Pipfile.lock
+.vscode/
+settings.json
 
