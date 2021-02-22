@@ -19,6 +19,7 @@ from django.conf.urls import include
 from rest_framework import routers
 from django.urls import path
 from rareapi.views import CategoriesView
+from rareapi.views import CommentView
 
 
 router = routers.DefaultRouter(trailing_slash=False)
@@ -31,5 +32,3 @@ urlpatterns = [
     # path('login', login_user),
     path('api-auth', include('rest_framework.urls', namespace='rest_framework')),
 ]
-
-
