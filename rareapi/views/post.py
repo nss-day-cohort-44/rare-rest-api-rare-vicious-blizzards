@@ -9,6 +9,8 @@ from rest_framework import serializers
 from rest_framework import status
 from rareapi.models import Post, RareUser, Tag, PostTag
 from django.contrib.auth.models import User
+from datetime import date
+
 
 class PostsView(ViewSet):
     """Rare Posts"""
@@ -47,10 +49,17 @@ class PostsView(ViewSet):
         """
 
         posts = Post.objects.all()
-        # post_tags = PostTag.objects.filter(post_)
+
+        # today = date.today()
+        # current_date = today.strftime("%m/%d/%y")
 
         ordered_posts = posts.order_by('-publication_date')
-
+        
+        # past_posts = []
+        # for post in ordered_posts:  
+        #     if (ordered_posts.publication_date > current_date): 
+        #         return past_posts.append(post)
+        # print(past_posts)
         serializer = PostSerializer(
             ordered_posts, many=True, context={'request': request})
 
