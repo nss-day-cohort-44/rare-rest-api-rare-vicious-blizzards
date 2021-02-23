@@ -32,7 +32,7 @@ class PostsView(ViewSet):
         post = Post()
         post.title = request.data["title"]
         post.publication_date = publish_date
-        post.post_image = request.data["postImage"]
+        post.post_image_url = request.data["postImage"]
         post.content = request.data["content"]
         post.approved = True
         category = Category.objects.get(pk=request.data["category"])
@@ -123,7 +123,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ("id", "title", "publication_date", "post_image", "content", "approved", "category", "user", "comments", "tags")
+        fields = ("id", "title", "publication_date", "post_image_url", "content", "approved", "category", "user", "comments", "tags")
         depth=2
 
 # class UserSerializer(serializers.ModelSerializer):
