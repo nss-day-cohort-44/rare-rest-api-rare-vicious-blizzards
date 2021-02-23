@@ -22,6 +22,7 @@ from rareapi.views import CategoriesView
 from rareapi.views import CommentView
 from rareapi.views import register_user, login_user
 
+
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'tags', Tags, 'tag')
 router.register(r'categories', CategoriesView, 'category')
