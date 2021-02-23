@@ -1,4 +1,5 @@
 """View module for handling requests about games"""
+from rareapi.models.comment import Comment
 from django.core.exceptions import ValidationError
 from rest_framework import status
 from django.http import HttpResponseServerError
@@ -6,7 +7,8 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from rareapi.models import Post, RareUser, Tag, PostTag, post_tag
+from rareapi.models import Post, RareUser, Tag, PostTag
+from django.contrib.auth.models import User
 
 class PostsView(ViewSet):
     """Rare Posts"""
@@ -51,6 +53,12 @@ class PostsView(ViewSet):
 
         return Response(serializer.data)
 
+class CommentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Comment
+        fields = ("id", "created_on", "content")
+
 class TagSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -65,7 +73,22 @@ class PostTagSerializer(serializers.ModelSerializer):
         model = PostTag
         fields = ("id", "tag")
         depth=1
-        
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ("username")
+
+class RareUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        user = UserSerializer(many=False)
+
+        model = RareUser
+        fields = ("id", "bio", "user")   
+
 class PostSerializer(serializers.ModelSerializer):
     """JSON serializer for Posts
 
@@ -74,6 +97,8 @@ class PostSerializer(serializers.ModelSerializer):
     """
 
     tags = PostTagSerializer(many=True)
+    comments = CommentSerializer(many=True)
+    user = RareUserSerializer(many=False)
 
     class Meta:
         model = Post
