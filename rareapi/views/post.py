@@ -48,8 +48,11 @@ class PostsView(ViewSet):
 
         posts = Post.objects.all()
         # post_tags = PostTag.objects.filter(post_)
+
+        ordered_posts = posts.order_by('-publication_date')
+
         serializer = PostSerializer(
-            posts, many=True, context={'request': request})
+            ordered_posts, many=True, context={'request': request})
 
         return Response(serializer.data)
 
@@ -74,20 +77,21 @@ class PostTagSerializer(serializers.ModelSerializer):
         fields = ("id", "tag")
         depth=1
 
-class UserSerializer(serializers.ModelSerializer):
+# class UserSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = User
-        fields = ("username")
+#     class Meta:
+#         model = User
+#         fields = ("username", "first_name")
+        
 
 class RareUserSerializer(serializers.ModelSerializer):
 
     class Meta:
 
-        user = UserSerializer(many=False)
-
+        # user = UserSerializer(many=False)
         model = RareUser
-        fields = ("id", "bio", "user")   
+        fields = ("id", "bio", "user")
+        depth=1
 
 class PostSerializer(serializers.ModelSerializer):
     """JSON serializer for Posts
