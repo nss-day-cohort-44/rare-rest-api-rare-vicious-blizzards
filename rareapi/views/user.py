@@ -6,6 +6,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
+from django.db.models.functions import Lower
 from rareapi.models import RareUser
 
 class Users(ViewSet):
@@ -29,7 +30,21 @@ class Users(ViewSet):
         except Exception as ex:
             return HttpResponseServerError(ex)
 
+    def list(self, request):
+        """Handle GET requests to tags resource
 
+        Returns:
+            Response -- JSON serialized list of tags
+        """
+        # Get all tag records from the database
+        user = RareUser.objects.all()
+
+        # Orders users alphabetically
+
+        ordered_users = user.order_by(Lower('user'))
+        serializer = UserSerializer(
+            ordered_users, many=True, context={'request': request})
+        return Response(serializer.data)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -42,3 +57,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = RareUser
         fields = ('user', 'profile_image','created_on','active','bio')
         depth =1
+
+
+
