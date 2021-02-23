@@ -91,6 +91,7 @@ class PostTagSerializer(serializers.ModelSerializer):
 
 # RareUserSerializer parses the desired fields from the rareuser objects.
 
+
 class RareUserSerializer(serializers.ModelSerializer):
 
     class Meta:
