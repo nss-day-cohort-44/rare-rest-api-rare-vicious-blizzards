@@ -65,6 +65,10 @@ class Tags(ViewSet):
         # Get all tag records from the database
         tags = Tag.objects.all()
 
+        # Orders tags alphabetically
+
+        ordered_tags = tags.order_by('alphabetically')
+
         serializer = TagSerializer(
             tags, many=True, context={'request': request})
         return Response(serializer.data)
