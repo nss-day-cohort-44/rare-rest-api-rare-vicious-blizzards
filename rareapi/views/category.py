@@ -47,11 +47,31 @@ class CategoriesView(ViewSet):
 
         categories = Category.objects.all()
 
+        ordered_posts = categories.order_by('label')
+
         serializer = CategorySerializer(
-            categories, many=True, context={'request': request})
+            ordered_posts, many=True, context={'request': request})
         return Response(serializer.data)
 
     # This will handle the edit of a category
+
+    def update(self, request, pk=None):
+        """Handle PUT requests for a game
+        Returns:
+            Response -- Empty body with 204 status code
+        """
+
+        # Do mostly the same thing as POST, but instead of
+        # creating a new instance of Game, get the game record
+        # from the database whose primary key is `pk`
+        category = Category.objects.get(pk=pk)
+        category.label = request.data["label"]
+
+        category.save()
+
+        # 204 status code means everything worked but the
+        # server is not sending back any data in the response
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
 
     def destroy(self, request, pk=None):
 
