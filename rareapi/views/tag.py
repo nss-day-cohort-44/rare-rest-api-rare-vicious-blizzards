@@ -67,10 +67,10 @@ class Tags(ViewSet):
 
         # Orders tags alphabetically
 
-        ordered_tags = tags.order_by('alphabetically')
+        ordered_tags = tags.order_by('label')
 
         serializer = TagSerializer(
-            tags, many=True, context={'request': request})
+            ordered_tags, many=True, context={'request': request})
         return Response(serializer.data)
 
 
