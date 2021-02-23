@@ -47,23 +47,22 @@ class PostsView(ViewSet):
         Returns:
             Response -- JSON serialized list of games
         """
+# ORM MEthod that get all Post objects from the DB
 
         posts = Post.objects.all()
 
-        # today = date.today()
-        # current_date = today.strftime("%m/%d/%y")
+# Orders posts newest to oldest
 
         ordered_posts = posts.order_by('-publication_date')
         
-        # past_posts = []
-        # for post in ordered_posts:  
-        #     if (ordered_posts.publication_date > current_date): 
-        #         return past_posts.append(post)
-        # print(past_posts)
+# Run the Post objects throught the serializer to parse wanted properties and to return JS readble code. 
+
         serializer = PostSerializer(
             ordered_posts, many=True, context={'request': request})
 
         return Response(serializer.data)
+
+# The comment model has "related_name" attribute on the "post" Forriegn Key and this virtual attribute give post access to the comment objects as "comments" in the PostSerializer. The CommentSerializer parses the desired fields from the object. 
 
 class CommentSerializer(serializers.ModelSerializer):
 
@@ -71,11 +70,15 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ("id", "created_on", "content")
 
+# The TagSerializer parses the desired fields from the tag objects.
+
 class TagSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tag
         fields = ("label",)
+
+# The PostTag model has "related_name" attribute on the "post" Foriegn Key and this virtual attribute give post access to the posttag objects as "tags" in the PostSerializer. The PostTagSerializer parses the desired fields from the objects. 
 
 class PostTagSerializer(serializers.ModelSerializer):
     
@@ -86,12 +89,7 @@ class PostTagSerializer(serializers.ModelSerializer):
         fields = ("id", "tag")
         depth=1
 
-# class UserSerializer(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = User
-#         fields = ("username", "first_name")
-        
+# RareUserSerializer parses the desired fields from the rareuser objects.
 
 class RareUserSerializer(serializers.ModelSerializer):
 
@@ -101,6 +99,8 @@ class RareUserSerializer(serializers.ModelSerializer):
         model = RareUser
         fields = ("id", "bio", "user")
         depth=1
+
+# The PostSerializer returns the desired fields for a post response and uses the other serializers to only pull the needed date. 
 
 class PostSerializer(serializers.ModelSerializer):
     """JSON serializer for Posts
@@ -118,7 +118,11 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ("id", "title", "publication_date", "post_image", "content", "approved", "category", "user", "comments", "tags")
         depth=2
 
+# class UserSerializer(serializers.ModelSerializer):
 
+#     class Meta:
+#         model = User
+#         fields = ("username", "first_name")
 
 
 
