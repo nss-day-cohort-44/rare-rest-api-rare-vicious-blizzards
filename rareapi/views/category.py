@@ -47,6 +47,8 @@ class CategoriesView(ViewSet):
 
         categories = Category.objects.all()
 
+        # orders categories alphabetically
+
         ordered_posts = categories.order_by('label')
 
         serializer = CategorySerializer(
@@ -62,7 +64,7 @@ class CategoriesView(ViewSet):
         """
 
         # Do mostly the same thing as POST, but instead of
-        # creating a new instance of Game, get the game record
+        # creating a new instance of Ctegory, get the category record
         # from the database whose primary key is `pk`
         category = Category.objects.get(pk=pk)
         category.label = request.data["label"]
