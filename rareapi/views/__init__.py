@@ -1,3 +1,4 @@
+from .post import PostsView
 from .tag import Tags
 from .comment import CommentView
 from .category import CategoriesView
