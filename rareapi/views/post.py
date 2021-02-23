@@ -7,7 +7,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from rareapi.models import Post, RareUser, Tag, PostTag
+from rareapi.models import Post, RareUser, Tag, PostTag, Category
 from django.contrib.auth.models import User
 from datetime import date
 
@@ -24,13 +24,19 @@ class PostsView(ViewSet):
 
         rare_user = RareUser.objects.get(user=request.auth.user)
 
+        today = date.today()
+        publish_date = today.strftime("%Y-%m-%d")
+
+        print("DATE",publish_date)
+
         post = Post()
         post.title = request.data["title"]
-        post.publication_date = request.data["publicationDate"]
+        post.publication_date = publish_date
         post.post_image = request.data["postImage"]
         post.content = request.data["content"]
-        post.approved = request.data["approved"]
-        post.category = request.data["category"]
+        post.approved = True
+        category = Category.objects.get(pk=request.data["category"])
+        post.category = category
         post.user = rare_user
 
         try:
@@ -47,6 +53,7 @@ class PostsView(ViewSet):
         Returns:
             Response -- JSON serialized list of games
         """
+
 # ORM MEthod that get all Post objects from the DB
 
         posts = Post.objects.all()
