@@ -6,6 +6,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
+from django.db.models.functions import Lower
 from rareapi.models import Tag
 
 class Tags(ViewSet):
@@ -67,7 +68,8 @@ class Tags(ViewSet):
 
         # Orders tags alphabetically
 
-        ordered_tags = tags.order_by('label')
+        ordered_tags = tags.order_by(Lower('label'))
+
 
         serializer = TagSerializer(
             ordered_tags, many=True, context={'request': request})
