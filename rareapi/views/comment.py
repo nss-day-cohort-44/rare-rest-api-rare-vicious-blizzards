@@ -27,8 +27,8 @@ class CommentView(ViewSet):
         # body of the request from the client.
         comment = Comment()
         comment.content = request.data["content"]
-        comment.created_on = request.data["createdOn"]
-        comment.post_id = request.data["post"]
+
+        comment.post_id = request.data["post_id"]
         comment.author = author
 
         # Use the Django ORM to get the record from the database
@@ -135,20 +135,31 @@ class CommentView(ViewSet):
         return Response(serializer.data)
 
 
+class CommentUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name']
+
+
+class RareUserSerializer(serializers.ModelSerializer):
+
+    user = CommentUserSerializer(many=False)
+
+    class Meta:
+        model = RareUser
+        fields = ('user',)
+
+
 class CommentSerializer(serializers.ModelSerializer):
     """JSON serializer for comments
 
     Arguments:
         serializer type
     """
+    author = RareUserSerializer(many=False)
+
     class Meta:
         model = Comment
         fields = ('id', 'post', 'author', 'content', 'created_on',)
         depth = 2
-
-
-class CommentUserSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name']

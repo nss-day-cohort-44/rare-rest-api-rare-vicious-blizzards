@@ -75,6 +75,9 @@ class CategoriesView(ViewSet):
         # server is not sending back any data in the response
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
+
+# This handles the delete process
+
     def destroy(self, request, pk=None):
 
         try:
