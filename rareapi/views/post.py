@@ -7,7 +7,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from rareapi.models import Post, RareUser, Tag, PostTag, Category
+from rareapi.models import Post, RareUser, Tag, PostTag, Category, category
 from django.contrib.auth.models import User
 from datetime import date
 
@@ -47,6 +47,33 @@ class PostsView(ViewSet):
         except ValidationError as ex:
             return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
 
+    def update(self, request, pk=None):
+
+        post = Post.objects.get(pk=pk)
+
+        post.title = request.data["title"]
+        post.publication_date = post.publication_date
+        post.post_image_url = request.data["postImage"]
+        post.content = request.data["content"]
+        post.approved = True
+        category = Category.objects.get(pk=request.data["category"])
+        post.category = category
+        post.user = post.user
+
+        post.save()
+
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+    def partial_update(self, request, pk=None):
+        post = Post.objects.get(pk=pk)
+        
+        for key in request.data:
+            setattr(post, key, request.data[key])
+
+        post.save()
+
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
+
     def retrieve(self, request, pk=None):
         """Handle GET requests for single post
 
@@ -85,11 +112,34 @@ class PostsView(ViewSet):
 
 # The comment model has "related_name" attribute on the "post" Forriegn Key and this virtual attribute give post access to the comment objects as "comments" in the PostSerializer. The CommentSerializer parses the desired fields from the object. 
 
+# RareUserSerializer parses the desired fields from the rareuser objects.
+
+# class UserSerializer(serializers.ModelSerializer):
+
+#     class Meta:
+#         model = User
+#         fields = ["username"]
+
+class RareUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        # user = UserSerializer(many=False)
+
+        model = RareUser
+        fields = ["id", "bio", "user"]
+        depth= 1
+
 class CommentSerializer(serializers.ModelSerializer):
+
+    # author = UserSerializer(many=False)
 
     class Meta:
         model = Comment
-        fields = ("id", "created_on", "content")
+        fields = ("id", "created_on", "content", "author")
+        depth = 2
+
+
 
 # The TagSerializer parses the desired fields from the tag objects.
 
@@ -110,17 +160,8 @@ class PostTagSerializer(serializers.ModelSerializer):
         fields = ("id", "tag")
         depth=1
 
-# RareUserSerializer parses the desired fields from the rareuser objects.
 
 
-class RareUserSerializer(serializers.ModelSerializer):
-
-    class Meta:
-
-        # user = UserSerializer(many=False)
-        model = RareUser
-        fields = ("id", "bio", "user")
-        depth=1
 
 # The PostSerializer returns the desired fields for a post response and uses the other serializers to only pull the needed date. 
 
@@ -140,11 +181,7 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ("id", "title", "publication_date", "post_image_url", "content", "approved", "category", "user", "comments", "tags")
         depth=2
 
-# class UserSerializer(serializers.ModelSerializer):
 
-#     class Meta:
-#         model = User
-#         fields = ("username", "first_name")
 
 
 
