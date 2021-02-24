@@ -8,4 +8,12 @@ class Post(models.Model):
     approved = models.BooleanField(default=None)
     user = models.ForeignKey("RareUser", on_delete=models.CASCADE)
     category = models.ForeignKey("Category", on_delete=models.CASCADE)
+
+    @property
+    def is_current_user(self):
+        return self.__is_current_user
+
+    @is_current_user.setter
+    def is_current_user(self, value):
+        self.__is_current_user = value
  
