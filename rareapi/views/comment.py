@@ -25,7 +25,7 @@ class CommentView(ViewSet):
         # body of the request from the client.
         comment = Comment()
         comment.content = request.data["content"]
-        comment.created_on = request.data["createdOn"]
+       
         comment.post_id = request.data["post"]
         comment.author = author
         
