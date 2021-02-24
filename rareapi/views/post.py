@@ -54,8 +54,16 @@ class PostsView(ViewSet):
             Response -- JSON serialized post instance
         """
 
+        rare_user = RareUser.objects.get(user=request.auth.user)
+
         try:
             post = Post.objects.get(pk=pk)
+
+            if post.user_id == rare_user.id:
+                post.is_current_user = True
+            else:
+                post.is_current_user = False
+                
             serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
@@ -68,18 +76,18 @@ class PostsView(ViewSet):
             Response -- JSON serialized list of games
         """
 
-# ORM MEthod that get all Post objects from the DB
+        # ORM MEthod that get all Post objects from the DB
 
         posts = Post.objects.all()
 
-# Orders posts newest to oldest
+
+        # Orders posts newest to oldest
 
         ordered_posts = posts.order_by('-publication_date')
         
-# Run the Post objects throught the serializer to parse wanted properties and to return JS readble code. 
+        # Run the Post objects throught the serializer to parse wanted properties and to return JS readble code. 
 
-        serializer = PostSerializer(
-            ordered_posts, many=True, context={'request': request})
+        serializer = PostSerializer(ordered_posts, many=True, context={'request': request})
 
         return Response(serializer.data)
 
@@ -137,7 +145,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ("id", "title", "publication_date", "post_image_url", "content", "approved", "category", "user", "comments", "tags")
+        fields = ("id", "title", "publication_date", "post_image_url", "content", "approved", "category", "user", "comments", "tags", "is_current_user")
         depth=2
 
 # class UserSerializer(serializers.ModelSerializer):
