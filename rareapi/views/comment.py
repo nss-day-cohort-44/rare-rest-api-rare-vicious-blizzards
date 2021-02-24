@@ -4,7 +4,9 @@ from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
+from django.contrib.auth.models import User
 from rareapi.models import Post, RareUser, Comment
+
 
 class CommentView(ViewSet):
     """RARE Comments"""
@@ -17,7 +19,7 @@ class CommentView(ViewSet):
         """
 
         # Uses the token passed in the `Authorization` header
-        
+
         author = RareUser.objects.get(user=request.auth.user)
 
         # Create a new Python instance of the Comment class
@@ -25,21 +27,21 @@ class CommentView(ViewSet):
         # body of the request from the client.
         comment = Comment()
         comment.content = request.data["content"]
-        comment.created_on = request.data["createdOn"]
-        comment.post_id = request.data["post"]
+
+        comment.post_id = request.data["post_id"]
         comment.author = author
-        
+
         # Use the Django ORM to get the record from the database
         # whose `id` is what the client passed as the
         # `postId` and `rareUserId` in the body of the request.
-       
 
         # Try to post the new comment to the database, then
         # serialize the comment instance as JSON, and send the
         # JSON as a response to the client request
         try:
             comment.save()
-            serializer = CommentSerializer(comment, context={'request': request})
+            serializer = CommentSerializer(
+                comment, context={'request': request})
             return Response(serializer.data)
 
         # If anything went wrong, catch the exception and
@@ -47,8 +49,6 @@ class CommentView(ViewSet):
         # client that something was wrong with its request data
         except ValidationError as ex:
             return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
-
-
 
     def retrieve(self, request, pk=None):
         """Handle GET requests for single comment
@@ -63,7 +63,8 @@ class CommentView(ViewSet):
             #
             # The `2` at the end of the route becomes `pk`
             comment = Comment.objects.get(pk=pk)
-            serializer = CommentSerializer(comment, context={'request': request})
+            serializer = CommentSerializer(
+                comment, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
@@ -124,7 +125,8 @@ class CommentView(ViewSet):
         #    http://localhost:8000/comments?type=1
         #
         # That URL will retrieve all comments?
-        post = self.request.query_params.get('post', None)  # <<not sure about 'post' here
+        post = self.request.query_params.get(
+            'post', None)  # <<not sure about 'post' here
         if post is not None:
             comment = comment.filter(post__id=post)
 
@@ -132,13 +134,32 @@ class CommentView(ViewSet):
             comment, many=True, context={'request': request})
         return Response(serializer.data)
 
+
+class CommentUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name']
+
+
+class RareUserSerializer(serializers.ModelSerializer):
+
+    user = CommentUserSerializer(many=False)
+
+    class Meta:
+        model = RareUser
+        fields = ('user',)
+
+
 class CommentSerializer(serializers.ModelSerializer):
     """JSON serializer for comments
 
     Arguments:
         serializer type
     """
+    author = RareUserSerializer(many=False)
+
     class Meta:
         model = Comment
-        fields = ('id', 'post', 'author','content', 'created_on')
-        # depth = 1
+        fields = ('id', 'post', 'author', 'content', 'created_on',)
+        depth = 2

@@ -9,6 +9,7 @@ from rest_framework import status
 from django.db.models.functions import Lower
 from rareapi.models import RareUser
 
+
 class Users(ViewSet):
     """Level up tags"""
 
@@ -55,8 +56,5 @@ class UserSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = RareUser
-        fields = ('id','user', 'profile_image','created_on','active','bio')
-        depth =1
-
-
-
+        fields = ('id', 'user', 'profile_image', 'created_on', 'active', 'bio')
+        depth = 1
